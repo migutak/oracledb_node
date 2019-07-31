@@ -3,12 +3,13 @@ module.exports = {
   
     // Instead of hard coding the password, consider prompting for it,
     // passing it in an environment variable via process.env, or using
-    // External Authentication.
+    // External Authentication. L#TTc011
     password      : process.env.NODE_ORACLEDB_PASSWORD || 'ecol',
   
     // For information on connection strings see:
     // https://oracle.github.io/node-oracledb/doc/api.html#connectionstrings
     connectString : process.env.NODE_ORACLEDB_CONNECTIONSTRING || "192.168.78.149:1521/ecol",
+    // connectString : process.env.NODE_ORACLEDB_CONNECTIONSTRING || "dbsvr2dr:1523/ecoltst",
   
     // Setting externalAuth is optional.  It defaults to false.  See:
     // https://oracle.github.io/node-oracledb/doc/api.html#extauth

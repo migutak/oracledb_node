@@ -229,6 +229,38 @@ router.get("/memos", (req, res, next) => {
         });
 });
 
+router.get("/buckets", (req, res, next) => {
+    var sql = "select bucket label, sum(abs(oustbalance)) Value from tqall group by bucket order by bucket";
+    oracledb.getConnection(
+        {
+            user: dbConfig.user,
+            password: dbConfig.password,
+            connectString: dbConfig.connectString
+        },
+        function (err, connection) {
+            if (err) {
+                console.error(err.message);
+                return;
+            }
+            connection.execute(
+                sql,
+                [],  // bind value for :id
+                {},
+                function (err, result) {
+                    if (err) {
+                        console.error(err.message);
+                        doRelease(connection);
+                        return;
+                    }
+                    res.status(200).json({
+                        message: "success",
+                        data: result.rows
+                    });
+                    doRelease(connection);
+                });
+        });
+});
+
 router.get("/autodemands", (req, res, next) => {
     (async function() {
         try {

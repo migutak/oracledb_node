@@ -9,6 +9,16 @@ var watch = require("./apis/watch");
 var withfunds = require("./apis/withfunds");
 var creditbuildup = require("./apis/creditbuldup");
 var nocreditbuildup = require("./apis/nocreditbuldup");
+var demandsdue = require("./apis/demandsdue");
+var demandsduecc = require("./apis/demandsduecc");
+var demandstatus = require("./apis/demands_status_update");
+var teles = require("./apis/teles");
+var notes = require("./apis/bulk_notes_insert");
+var tcards = require("./apis/tcards");
+var cards_watch_stage = require("./apis/cards_watch_stage");
+var otheraccs = require("./apis/otheraccs");
+var mcoopcash_stage = require("./apis/mcoopcash_stage");
+var s_plans = require("./apis/tbl_s_plans");
 
 const app = express();
 
@@ -23,6 +33,16 @@ app.use("/nodeapi/withfunds",withfunds);
 app.use("/nodeapi/brokenptps",brokenptps);
 app.use("/nodeapi/creditbuildup",creditbuildup);
 app.use("/nodeapi/nocreditbuildup",nocreditbuildup);
+app.use("/nodeapi/demandsdue",demandsdue);
+app.use("/nodeapi/demandsduecc",demandsduecc);
+app.use("/nodeapi/demandstatus",demandstatus);
+app.use("/nodeapi/notes",notes);
+app.use("/nodeapi/teles",teles);
+app.use("/nodeapi/tcards",tcards);
+app.use("/nodeapi/cards_watch_stage",cards_watch_stage);
+app.use("/nodeapi/otheraccs",otheraccs);
+app.use("/nodeapi/mcoopcash_stage",mcoopcash_stage);
+app.use("/nodeapi/s_plans",s_plans);
 
 //if we are here then the specified request is not found
 app.use((req,res,next)=> {
