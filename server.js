@@ -7,4 +7,4 @@ const port = process.env.port || 6001;
 //Create server with exported express app
 const server = http.createServer(app);
 server.listen(port);
-console.log('OracleDB_Node running');
+console.log('OracleDB_Node is started ... ...');

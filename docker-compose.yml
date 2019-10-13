@@ -1,12 +1,12 @@
 version: "3.3"
 services:
-  oracledb_node:
-    image: migutak/oracledbnode:latest
-    container_name: oracledb_node
+  oracledbnode:
+    image: migutak/oracledbnode:1.0.0
+    container_name: oracledbnode
     restart: always
     environment:
-      - DB_USER='ecol'
-      - DB_PASSWORD='ecol'
-      - DB_CONNECTIONSTRING='192.168.0.26:1521/ORCLCDB.localdomain'
+      - DB_USER=ecol
+      - DB_PASSWORD=ecol
+      - DB_CONNECTIONSTRING=192.168.0.30:1521/ORCLCDB.localdomain
     ports:
-      - "6001:6001"
+      - "6002:6001"

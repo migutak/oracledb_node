@@ -14,9 +14,12 @@ RUN yum update -y && \
   node --version && \
   npm --version && \
   npm install && \
-  npm install pm2 -g && \
+  # npm install pm2 -g && \
   echo Installed
 
 EXPOSE 6001
 
-CMD ["pm2-runtime", "ecosystem.config.js"]
+# CMD ["pm2-runtime", "ecosystem.config.js"]
+CMD ["node", "server.js"]
+# docker build -t migutak/oracledbnode:1.0.0 .
+
