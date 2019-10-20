@@ -19,6 +19,7 @@ var cards_watch_stage = require("./apis/cards_watch_stage");
 var otheraccs = require("./apis/otheraccs");
 var mcoopcash_stage = require("./apis/mcoopcash_stage");
 var s_plans = require("./apis/tbl_s_plans");
+var ptpsammend = require("./apis/ptps_ammend");
 
 const app = express();
 
@@ -43,6 +44,7 @@ app.use("/nodeapi/cards_watch_stage",cards_watch_stage);
 app.use("/nodeapi/otheraccs",otheraccs);
 app.use("/nodeapi/mcoopcash_stage",mcoopcash_stage);
 app.use("/nodeapi/s_plans",s_plans);
+app.use("/nodeapi/ptpsammend",ptpsammend);
 
 //if we are here then the specified request is not found
 app.use((req,res,next)=> {
