@@ -20,6 +20,8 @@ var otheraccs = require("./apis/otheraccs");
 var mcoopcash_stage = require("./apis/mcoopcash_stage");
 var s_plans = require("./apis/tbl_s_plans");
 var ptpsammend = require("./apis/ptps_ammend");
+var gridviewall = require("./apis/grid_viewall");
+var gridmcoopcashviewall = require("./apis/grid_mcoopcashviewall");
 
 const app = express();
 
@@ -45,6 +47,8 @@ app.use("/nodeapi/otheraccs",otheraccs);
 app.use("/nodeapi/mcoopcash_stage",mcoopcash_stage);
 app.use("/nodeapi/s_plans",s_plans);
 app.use("/nodeapi/ptpsammend",ptpsammend);
+app.use("/nodeapi/gridviewall",gridviewall);
+app.use("/nodeapi/gridmcoopcashviewall",gridmcoopcashviewall);
 
 //if we are here then the specified request is not found
 app.use((req,res,next)=> {
