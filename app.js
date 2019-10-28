@@ -22,6 +22,7 @@ var s_plans = require("./apis/tbl_s_plans");
 var ptpsammend = require("./apis/ptps_ammend");
 var gridviewall = require("./apis/grid_viewall");
 var gridmcoopcashviewall = require("./apis/grid_mcoopcashviewall");
+var gridcardsviewall = require("./apis/grid_cardsviewall");
 
 const app = express();
 
@@ -49,6 +50,7 @@ app.use("/nodeapi/s_plans",s_plans);
 app.use("/nodeapi/ptpsammend",ptpsammend);
 app.use("/nodeapi/gridviewall",gridviewall);
 app.use("/nodeapi/gridmcoopcashviewall",gridmcoopcashviewall);
+app.use("/nodeapi/gridcardsviewall",gridcardsviewall);
 
 //if we are here then the specified request is not found
 app.use((req,res,next)=> {
