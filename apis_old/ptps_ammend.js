@@ -10,11 +10,12 @@ router.post("/ammendptp", (req, res, next) => {
   const id = req.body.id;
   const ptpamount = req.body.ptpamount;
   const ptpdate = req.body.ptpdate;
+  const ptpdate2 = req.body.ptpdate2;
   const ammendby = req.body.ammendby;
   const ammendcomment = req.body.ammendcomment;
 
-  const sql = "update ptps set ptpamount =" + ptpamount + ", ptpdate='" + ptpdate + "', ammendby='" + ammendby + "', ammended='y', ammendcomment='" + ammendcomment + "' where id = " + id;
-
+  const sql = "update ptps set ptpamount =" + ptpamount + ", ptpdate='" + ptpdate + "', promisedate=DATE '" + ptpdate2 + "', ammendby='" + ammendby + "', ammended='y', ammendcomment='" + ammendcomment + "' where id = " + id;
+  // console.log(sql)
   (async function () {
     try {
       connection = await oracledb.getConnection({

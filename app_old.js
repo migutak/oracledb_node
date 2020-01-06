@@ -23,13 +23,7 @@ var ptpsammend = require("./apis/ptps_ammend");
 var gridviewall = require("./apis/grid_viewall");
 var gridmcoopcashviewall = require("./apis/grid_mcoopcashviewall");
 var gridcardsviewall = require("./apis/grid_cardsviewall");
-var gridviewallloans = require("./apis/grid_viewall_loans"); // loans queue/viewall loans
-var gridnocreditbuild = require("./apis/grid_nocredit_buildup"); // loans queue/nocreditbuildup
-var gridcreditbuild = require("./apis/grid_credit_buildup"); // loans queue/creditbuildup
-var gridtranscwithfunds = require("./apis/grid_transaccwithfunds"); // loans queue/transaccwithfunds
-var gridbrokenptps = require("./apis/grid_brokenptps"); // loans queue/brokenptps
-var gridcreditcardszerobal = require("./apis/grid_creditcardszerobal"); // Creditcards/zerobalance
-var gridcreditcardsviewallcards = require("./apis/grid_creditcardsviewallcards");
+var activeptps = require("./apis/activeptps");
 
 const app = express();
 
@@ -58,14 +52,7 @@ app.use("/nodeapi/ptpsammend",ptpsammend);
 app.use("/nodeapi/gridviewall",gridviewall);
 app.use("/nodeapi/gridmcoopcashviewall",gridmcoopcashviewall);
 app.use("/nodeapi/gridcardsviewall",gridcardsviewall);
-app.use("/nodeapi/gridviewallloans",gridviewallloans); // loans queue/viewall loans
-app.use("/nodeapi/gridnocreditbuild",gridnocreditbuild); // loans queue/nocreditbuildup
-app.use("/nodeapi/gridcreditbuild",gridcreditbuild); // loans queue/creditbuildup
-app.use("/nodeapi/gridtranscwithfunds",gridtranscwithfunds); // loans queue/transaccwithfunds
-app.use("/nodeapi/gridbrokenptps",gridbrokenptps); // loans queue/brokenptps
-app.use("/nodeapi/gridcreditcardszerobal",gridcreditcardszerobal); // Creditcards/zerobalance
-app.use("/nodeapi/gridcreditcardsviewallcards",gridcreditcardsviewallcards); // Creditcards/viewallcards
-
+app.use("/nodeapi/activeptps",activeptps);
 
 //if we are here then the specified request is not found
 app.use((req,res,next)=> {

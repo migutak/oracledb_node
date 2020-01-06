@@ -52,7 +52,7 @@ function getData(request, resultsCallback) {
 
   function buildSql(request) {
       const selectSql = createSelectSql(request);
-      const fromSql = ' from ecol.tqall ';
+      const fromSql = ' from ecol.mcoopcash_stage ';
       const whereSql = createWhereSql(request);
       const limitSql = createLimitSql(request);
 
@@ -154,8 +154,7 @@ function getData(request, resultsCallback) {
       if (groupKeys.length > 0) {
           groupKeys.forEach(function (key, index) {
               const colName = rowGroupCols[index].field;
-              whereParts.push(colName +  '= \'' + key + '\'')
-            //   whereParts.push(colName +  '= "' + key + '"')
+              whereParts.push(colName + ' = "' + key + '"')
           });
       }
 

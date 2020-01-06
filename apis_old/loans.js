@@ -195,7 +195,7 @@ router.get("/viewall", (req, res, next) => {
                 });
         });*/
 
-});
+}); // end viewall
 
 router.get("/memos", (req, res, next) => {
     var sql = "select distinct cycle memo from cards_stage union select distinct substr(accnumber,3,3) memo from loans_stage"
@@ -229,75 +229,6 @@ router.get("/memos", (req, res, next) => {
         });
 });
 
-router.get("/branches", (req, res, next) => {
-    var sql = "select buckets, sum(abs(outbalance))  from tqall group by buckets order by buckets";
-    oracledb.getConnection(
-        {
-            user: dbConfig.user,
-            password: dbConfig.password,
-            connectString: dbConfig.connectString
-        },
-        function (err, connection) {
-            if (err) {
-                console.error(err.message);
-                return;
-            }
-            connection.execute(
-                sql,
-                [],  // bind value for :id
-                {},
-                function (err, result) {
-                    if (err) {
-                        console.error(err.message);
-                        doRelease(connection);
-                        return;
-                    }
-                    res.status(200).json({
-                        // message: "success",
-                        data: result.rows
-                        
-                    });
-                    doRelease(connection);
-                });
-        });
-});
-
-
-router.get("/buckets", (req, res, next) => {
-    var sql = "select bucket, sum(abs(oustbalance))  from tqall group by bucket order by bucket";
-    oracledb.getConnection(
-        {
-            user: dbConfig.user,
-            password: dbConfig.password,
-            connectString: dbConfig.connectString
-        },
-        function (err, connection) {
-            if (err) {
-                console.error(err.message);
-                return;
-            }
-            connection.execute(
-                sql,
-                [],  // bind value for :id
-                {},
-                function (err, result) {
-                    if (err) {
-                        console.error(err.message);
-                        doRelease(connection);
-                        return;
-                    }
-                    res.status(200).json({
-                        message: "success",
-                        data: result.rows
-                    });
-                    doRelease(connection);
-                });
-        });
-});
-
-
-
-
 
 router.get("/demandlettersccdue", (req, res, next) => {
     var sql = "Select count(*) totalviewall from demandsduecc";
@@ -309,7 +240,38 @@ router.get("/demandlettersccdue", (req, res, next) => {
         },
         function (err, connection) {
             if (err) {
-                console.error(err.message);
+                console.error(err);
+                return;
+            }
+            connection.execute(
+                sql,
+                [],  // bind value for :id
+                {},
+                function (err, result) {
+                    if (err) {
+                        console.error(err.message);
+                        doRelease(connection);
+                        return;
+                    }
+                    res.status(200).json({
+                        data: result.rows
+                    });
+                    doRelease(connection);
+                });
+        });
+});
+
+router.get("/demandlettersdue", (req, res, next) => {
+    var sql = "Select count(*) totalviewall from demandsdue";
+    oracledb.getConnection(
+        {
+            user: dbConfig.user,
+            password: dbConfig.password,
+            connectString: dbConfig.connectString
+        },
+        function (err, connection) {
+            if (err) {
+                console.error(err);
                 return;
             }
             connection.execute(
@@ -331,8 +293,7 @@ router.get("/demandlettersccdue", (req, res, next) => {
 });
 
 
-
-router.get("/brokenptps", (req, res, next) => {
+  router.get("/brokenptps", (req, res, next) => {
     var sql = "select count(*) total from ptps p join tqall t on p.accnumber=t.accnumber where p.met !='met'";
     oracledb.getConnection(
         {
@@ -356,6 +317,38 @@ router.get("/brokenptps", (req, res, next) => {
                         return;
                     }
                     res.status(200).json({
+                        data: result.rows
+                    });
+                    doRelease(connection);
+                });
+        });
+});
+
+router.get("/buckets", (req, res, next) => {
+    var sql = "select bucket label, sum(abs(oustbalance)) Value from tqall group by bucket order by bucket";
+    oracledb.getConnection(
+        {
+            user: dbConfig.user,
+            password: dbConfig.password,
+            connectString: dbConfig.connectString
+        },
+        function (err, connection) {
+            if (err) {
+                console.error(err.message);
+                return;
+            }
+            connection.execute(
+                sql,
+                [],  // bind value for :id
+                {},
+                function (err, result) {
+                    if (err) {
+                        console.error(err.message);
+                        doRelease(connection);
+                        return;
+                    }
+                    res.status(200).json({
+                        message: "success",
                         data: result.rows
                     });
                     doRelease(connection);
@@ -459,26 +452,6 @@ router.get("/:productId", (req, res, next) => {
         }
     });
 });
-
-//handles url http://localhost:6001/products/delete
-router.post("/delete", (req, res, next) => {
-
-    var pid = req.body.productId;
-
-    db.query(Product.deleteProductByIdSQL(pid), (err, data) => {
-        if (!err) {
-            if (data && data.affectedRows > 0) {
-                res.status(200).json({
-                    message: `Product deleted with id = ${pid}.`,
-                    affectedRows: data.affectedRows
-                });
-            } else {
-                res.status(200).json({
-                    message: "Product Not found."
-                });
-            }
-        }
-    });
-});
+  
 
 module.exports = router;

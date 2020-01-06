@@ -23,7 +23,7 @@ router.get("/all", (req, res, next) => {
         rows = 20;
     }
 
-    var sql = "select * from demandsdue where status not in ('sent','self cure') order by datedue desc offset "+offset+" rows fetch next "+rows+" rows only";
+    var sql = "select * from demandsdue where status not in ('sent','self cure','manual-sent') order by datedue desc offset "+offset+" rows fetch next "+rows+" rows only";
     var total = 0;
     (async function() {
         try {
@@ -33,7 +33,7 @@ router.get("/all", (req, res, next) => {
             connectString: dbConfig.connectString
           });
       
-          result = await connection.execute("select count(*) total from demandsdue where status not in ('sent','self cure') ");
+          result = await connection.execute("select count(*) total from demandsdue where status not in ('sent','self cure','manual-sent') ");
           data = await connection.execute(sql);
           //
           total = result.rows[0].TOTAL;

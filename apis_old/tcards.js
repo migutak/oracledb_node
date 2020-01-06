@@ -14,6 +14,35 @@ function doRelease(connection) {
         });
 }
 
+router.get("/raw", (req, res, next) => {
+
+  var sql = "select * from tcards order by outbalance desc";
+  (async function() {
+      try {
+        connection = await oracledb.getConnection({
+          user: dbConfig.user,
+          password: dbConfig.password,
+          connectString: dbConfig.connectString
+        });
+    
+        data = await connection.execute(sql);
+        //
+        res.status(200).json(data.rows);
+    
+      } catch (err) {
+        console.error(err);
+      } finally {
+        if (connection) {
+          try {
+            await connection.close();   // Always close connections
+          } catch (err) {
+            console.error(err.message);
+          }
+        }
+      }
+    })();
+});
+
 router.get("/all", (req, res, next) => {
     let offset = req.query.offset;
     let rows = req.query.rows;
@@ -23,7 +52,7 @@ router.get("/all", (req, res, next) => {
         rows = 20;
     }
 
-    var sql = "select * from demandsdue where status not in ('sent','self cure') order by datedue desc offset "+offset+" rows fetch next "+rows+" rows only";
+    var sql = "select * from tcards order by outbalance desc offset "+offset+" rows fetch next "+rows+" rows only";
     var total = 0;
     (async function() {
         try {
@@ -33,7 +62,7 @@ router.get("/all", (req, res, next) => {
             connectString: dbConfig.connectString
           });
       
-          result = await connection.execute("select count(*) total from demandsdue where status not in ('sent','self cure') ");
+          result = await connection.execute("select count(*) total from tcards ");
           data = await connection.execute(sql);
           //
           total = result.rows[0].TOTAL;
@@ -68,7 +97,7 @@ router.get("/all_search", (req, res, next) => {
         searchtext = ''
     }
 
-    var sql = "select * from demandsdue where status not in ('sent','self cure') and upper(accnumber||custnumber||client_name||arocode||rrocode||colofficer) like '%"+searchtext.toUpperCase() +"%' offset "+offset+" rows fetch next "+rows+" rows only";
+    var sql = "select * from tcards where upper(cardacct||cardnumber||cardname||NATIONID||colofficer) like '%"+searchtext.toUpperCase() +"%' offset "+offset+" rows fetch next "+rows+" rows only";
     var total = 0;
     (async function() {
         try {
@@ -78,7 +107,7 @@ router.get("/all_search", (req, res, next) => {
             connectString: dbConfig.connectString
           });
       
-          result = await connection.execute("select count(*) total from demandsdue where status not in ('sent','self cure') and upper(accnumber||custnumber||client_name||arocode||rrocode||colofficer) like '%"+searchtext.toUpperCase() +"%'");
+          result = await connection.execute("select count(*) total from tcards where upper(cardacct||cardnumber||cardname||NATIONID||colofficer) like '%"+searchtext.toUpperCase() +"%'");
           data = await connection.execute(sql);
           //
           total = result.rows[0].TOTAL;

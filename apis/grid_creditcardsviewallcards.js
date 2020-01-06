@@ -52,7 +52,7 @@ function getData(request, resultsCallback) {
 
   function buildSql(request) {
       const selectSql = createSelectSql(request);
-      const fromSql = ' from ecol.tqall ';
+      const fromSql = ' from cards_watch_stage ';
       const whereSql = createWhereSql(request);
       const limitSql = createLimitSql(request);
 

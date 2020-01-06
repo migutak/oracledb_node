@@ -23,7 +23,7 @@ router.get("/all", (req, res, next) => {
         rows = 20;
     }
 
-    var sql = "select * from demandsdue where status not in ('sent','self cure') order by datedue desc offset "+offset+" rows fetch next "+rows+" rows only";
+    var sql = "select * from demandsduecc where status = 'pending' offset "+offset+" rows fetch next "+rows+" rows only";
     var total = 0;
     (async function() {
         try {
@@ -33,7 +33,7 @@ router.get("/all", (req, res, next) => {
             connectString: dbConfig.connectString
           });
       
-          result = await connection.execute("select count(*) total from demandsdue where status not in ('sent','self cure') ");
+          result = await connection.execute("select count(*) total from demandsduecc where status = 'pending' ");
           data = await connection.execute(sql);
           //
           total = result.rows[0].TOTAL;
@@ -68,7 +68,7 @@ router.get("/all_search", (req, res, next) => {
         searchtext = ''
     }
 
-    var sql = "select * from demandsdue where status not in ('sent','self cure') and upper(accnumber||custnumber||client_name||arocode||rrocode||colofficer) like '%"+searchtext.toUpperCase() +"%' offset "+offset+" rows fetch next "+rows+" rows only";
+    var sql = "select * from demandsduecc where status = 'pending' and upper(accnumber||custnumber||client_name||arocode||rrocode||colofficer) like '%"+searchtext.toUpperCase() +"%' offset "+offset+" rows fetch next "+rows+" rows only";
     var total = 0;
     (async function() {
         try {
@@ -78,7 +78,7 @@ router.get("/all_search", (req, res, next) => {
             connectString: dbConfig.connectString
           });
       
-          result = await connection.execute("select count(*) total from demandsdue where status not in ('sent','self cure') and upper(accnumber||custnumber||client_name||arocode||rrocode||colofficer) like '%"+searchtext.toUpperCase() +"%'");
+          result = await connection.execute("select count(*) total from demandsduecc where status = 'pending' and upper(accnumber||custnumber||client_name||arocode||rrocode||colofficer) like '%"+searchtext.toUpperCase() +"%'");
           data = await connection.execute(sql);
           //
           total = result.rows[0].TOTAL;

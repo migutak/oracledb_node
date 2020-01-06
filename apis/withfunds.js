@@ -18,12 +18,12 @@ router.get("/all", (req, res, next) => {
     let offset = req.query.offset;
     let rows = req.query.rows;
 
-    if(offset == undefined || rows == undefined) {
-        offset = 0;
-        rows = 20;
-    }
+    // if(offset == undefined || rows == undefined) {
+    //     offset = 0;
+    //     rows = 20;
+    // }
 
-    var sql = "select * from tqall where settleaccbal > 1000 order by settleaccbal desc offset "+offset+" rows fetch next "+rows+" rows only";
+    var sql = "select * from tqall where settleaccbal > 1000 order by settleaccbal desc";
     var total = 0;
     (async function() {
         try {
