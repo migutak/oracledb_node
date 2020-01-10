@@ -330,6 +330,37 @@ router.get("/demandlettersccdue", (req, res, next) => {
         });
 });
 
+router.get("/demandlettersdue", (req, res, next) => {
+    var sql = "Select count(*) totalviewall from demandsdue";
+    oracledb.getConnection(
+        {
+            user: dbConfig.user,
+            password: dbConfig.password,
+            connectString: dbConfig.connectString
+        },
+        function (err, connection) {
+            if (err) {
+                console.error(err.message);
+                return;
+            }
+            connection.execute(
+                sql,
+                [],  // bind value for :id
+                {},
+                function (err, result) {
+                    if (err) {
+                        console.error(err.message);
+                        doRelease(connection);
+                        return;
+                    }
+                    res.status(200).json({
+                        data: result.rows
+                    });
+                    doRelease(connection);
+                });
+        });
+});
+
 
 
 router.get("/brokenptps", (req, res, next) => {
