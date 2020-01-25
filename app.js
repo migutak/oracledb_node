@@ -30,6 +30,7 @@ var gridtranscwithfunds = require("./apis/grid_transaccwithfunds"); // loans que
 var gridbrokenptps = require("./apis/grid_brokenptps"); // loans queue/brokenptps
 var gridcreditcardszerobal = require("./apis/grid_creditcardszerobal"); // Creditcards/zerobalance
 var gridcreditcardsviewallcards = require("./apis/grid_creditcardsviewallcards");
+var activeptps = require("./apis/activeptps");
 
 const app = express();
 
@@ -65,7 +66,7 @@ app.use("/nodeapi/gridtranscwithfunds",gridtranscwithfunds); // loans queue/tran
 app.use("/nodeapi/gridbrokenptps",gridbrokenptps); // loans queue/brokenptps
 app.use("/nodeapi/gridcreditcardszerobal",gridcreditcardszerobal); // Creditcards/zerobalance
 app.use("/nodeapi/gridcreditcardsviewallcards",gridcreditcardsviewallcards); // Creditcards/viewallcards
-
+app.use("/nodeapi/activeptps",activeptps);
 
 //if we are here then the specified request is not found
 app.use((req,res,next)=> {

@@ -1,0 +1,68 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: oracledbnode-service
+spec:
+  selector:
+    app: oracledbnode
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 6001
+      nodePort: 30020
+  type: NodePort
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oracledbnode
+  labels:
+    app: oracledbnode
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: oracledbnode
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        app: oracledbnode
+    spec:
+      containers:
+      - name: oracledbnode
+        image: 172.16.19.151:5000/oracledbnode:1.0.1
+        ports:
+        - containerPort: 6001
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: DB_CONNECTIONSTRING
+          valueFrom:
+            configMapKeyRef:
+              name: ecolconfigmap
+              key: connectionstring
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: ecolsecret
+              key: username
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: ecolsecret
+              key: dbpassword
+        resources:
+          requests:
+            memory: "2Gi"
+            cpu: "500m"
+          limits:
+            memory: "4Gi"
+            cpu: "500m"
+

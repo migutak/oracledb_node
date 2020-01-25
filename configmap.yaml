@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ecol-configmap
+  namespace: default
+data:
+  IMAGEPATH: /app/docxletters/routes/
+  FILEPATH: /app/nfsmount/demandletters
+  DB_USER: ecol
+  DB_PASSWORD: ecol
