@@ -32,7 +32,7 @@ router.get("/active", (req, res, next) => {
         data: result.rows
       });
     });
-    // doRelease(connection);
+    
   });
 });
 

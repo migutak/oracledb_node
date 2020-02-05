@@ -5,6 +5,8 @@ metadata:
   namespace: default
 data:
   IMAGEPATH: /app/docxletters/routes/
-  FILEPATH: /app/nfsmount/demandletters
+  FILEPATH: /app/nfs/demandletters
   DB_USER: ecol
   DB_PASSWORD: ecol
+  CONNECTIONSTRING: 192.168.0.30:1521/ORCLCDB.localdomain
+  

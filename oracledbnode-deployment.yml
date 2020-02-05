@@ -47,7 +47,7 @@ spec:
           valueFrom:
             configMapKeyRef:
               name: ecolconfigmap
-              key: connectionstring
+              key: CONNECTIONSTRING
         - name: DB_USER
           valueFrom:
             secretKeyRef:

@@ -31,12 +31,15 @@ var gridbrokenptps = require("./apis/grid_brokenptps"); // loans queue/brokenptp
 var gridcreditcardszerobal = require("./apis/grid_creditcardszerobal"); // Creditcards/zerobalance
 var gridcreditcardsviewallcards = require("./apis/grid_creditcardsviewallcards");
 var activeptps = require("./apis/activeptps");
+var xlsuploads = require("./apis/xlsuploads");
 
 const app = express();
 
 app.use(cors());
-app.use(bodyparser.json());
-app.use(bodyparser.urlencoded({extended:false}));
+// app.use(bodyparser.json());
+// app.use(bodyparser.urlencoded({extended:false}));
+app.use(bodyparser.json({ limit: '10mb' }));
+app.use(bodyparser.urlencoded({ extended: true, limit: '10mb' }));
 
 app.use("/nodeapi/loans",loans);
 app.use("/nodeapi/watch",watch);
@@ -67,6 +70,7 @@ app.use("/nodeapi/gridbrokenptps",gridbrokenptps); // loans queue/brokenptps
 app.use("/nodeapi/gridcreditcardszerobal",gridcreditcardszerobal); // Creditcards/zerobalance
 app.use("/nodeapi/gridcreditcardsviewallcards",gridcreditcardsviewallcards); // Creditcards/viewallcards
 app.use("/nodeapi/activeptps",activeptps);
+app.use("/nodeapi/xlsuploads",xlsuploads);
 
 //if we are here then the specified request is not found
 app.use((req,res,next)=> {
