@@ -7,161 +7,157 @@ var dbConfig = require('../dbconfig.js');
 const router = express.Router();
 
 function doRelease(connection) {
-    connection.close(
-        function (err) {
-            if (err)
-                console.error(err.message);
-        });
+    if (connection) {
+        //
+        connection.close(
+            function (err) {
+                if (err) console.error(err.message);
+            });
+    }
 }
 
 //
 router.get("/viewall", (req, res, next) => {
     const pagesize = req.query.pagesize;
-	const pagenum = req.query.pagenum;
-	var sortdatafield = req.query.sortdatafield;
-	var sortorder = req.query.sortorder;
-	var filterscount = req.query.filterscount;
-					
-	// console.log('filterscount=' + filterscount);				
-	var where = "";
+    const pagenum = req.query.pagenum;
+    var sortdatafield = req.query.sortdatafield;
+    var sortorder = req.query.sortorder;
+    var filterscount = req.query.filterscount;
+
+    // console.log('filterscount=' + filterscount);				
+    var where = "";
     const start = pagesize * pagenum;
     if (filterscount > 0) {
         where = " WHERE (";
         let tmpdatafield = "";
         let tmpfilteroperator = "";
-        
-        for (let i=0; i < filterscount; i++){
+
+        for (let i = 0; i < filterscount; i++) {
             const filtervalue = req.query.filtervalue0;
             const filtercondition = req.query.filtercondition0;
             const filterdatafield = req.query.filterdatafield0;
             const filteroperator = req.query.filteroperator0;
-            
+
             // console.log(filtercondition);
 
-            if (tmpdatafield == "")
-            {
-                tmpdatafield = filterdatafield;			
+            if (tmpdatafield == "") {
+                tmpdatafield = filterdatafield;
             }
-            else if (tmpdatafield !=filterdatafield)
-            {
+            else if (tmpdatafield != filterdatafield) {
                 where += ")AND(";
             }
-            else if (tmpdatafield == filterdatafield)
-            {
-                if (tmpfilteroperator == "0")
-                {
+            else if (tmpdatafield == filterdatafield) {
+                if (tmpfilteroperator == "0") {
                     where += " AND ";
                 }
-                else where += " OR ";	
+                else where += " OR ";
             }
-                
+
             // build the "WHERE" clause depending on the filter's condition, value and datafield.
-            switch(filtercondition){
-            case "CONTAINS":
-                where += " " + filterdatafield + " LIKE '%" + filtervalue + "%'";
-                break;
-            case "CONTAINS_CASE_SENSITIVE":
-                where += " " + filterdatafield + " LIKE BINARY '%" + filtervalue + "%'";
-                break;
-            case "DOES_NOT_CONTAIN":
-                where += " " + filterdatafield + " NOT LIKE '%" + filtervalue + "%'";
-                break;
-            case "DOES_NOT_CONTAIN_CASE_SENSITIVE":
-                where += " " + filterdatafield + " NOT LIKE BINARY '%" + filtervalue + "%'";
-                break;
-            case "EQUAL":
-                where += " " + filterdatafield + " = '" + filtervalue + "'";
-                break;
-            case "EQUAL_CASE_SENSITIVE":
-                where += " " + filterdatafield + " LIKE BINARY '" + filtervalue + "'";
-                break;
-            case "NOT_EQUAL":
-                where += " " + filterdatafield + " NOT LIKE '" + filtervalue + "'";
-                break;
-            case "NOT_EQUAL_CASE_SENSITIVE":
-                where += " " + filterdatafield + " NOT LIKE BINARY '" + filtervalue + "'";
-                break;
-            case "GREATER_THAN":
-                where += " " + filterdatafield + " > '" + filtervalue + "'";
-                break;
-            case "LESS_THAN":
-                where += " " + filterdatafield + " < '" + filtervalue + "'";
-                break;
-            case "GREATER_THAN_OR_EQUAL":
-                where += " " + filterdatafield + " >= '" + filtervalue + "'";
-                break;
-            case "LESS_THAN_OR_EQUAL":
-                where += " " + filterdatafield + " <= '" + filtervalue + "'";
-                break;
-            case "STARTS_WITH":
-                where += " " + filterdatafield + " LIKE '" + filtervalue + "%'";
-                break;
-            case "STARTS_WITH_CASE_SENSITIVE":
-                where += " " + filterdatafield + " LIKE BINARY '" + filtervalue + "%'";
-                break;
-            case "ENDS_WITH":
-                where += " " + filterdatafield + " LIKE '%" + filtervalue + "'";
-                break;
-            case "ENDS_WITH_CASE_SENSITIVE":
-                where += " " + filterdatafield + " LIKE BINARY '%" + filtervalue + "'";
-                break;
-            case "NULL":
-                where += " " + filterdatafield + " IS NULL";
-                break;
-            case "NOT_NULL":
-                where += " " + filterdatafield + " IS NOT NULL";
-                break;
+            switch (filtercondition) {
+                case "CONTAINS":
+                    where += " " + filterdatafield + " LIKE '%" + filtervalue + "%'";
+                    break;
+                case "CONTAINS_CASE_SENSITIVE":
+                    where += " " + filterdatafield + " LIKE BINARY '%" + filtervalue + "%'";
+                    break;
+                case "DOES_NOT_CONTAIN":
+                    where += " " + filterdatafield + " NOT LIKE '%" + filtervalue + "%'";
+                    break;
+                case "DOES_NOT_CONTAIN_CASE_SENSITIVE":
+                    where += " " + filterdatafield + " NOT LIKE BINARY '%" + filtervalue + "%'";
+                    break;
+                case "EQUAL":
+                    where += " " + filterdatafield + " = '" + filtervalue + "'";
+                    break;
+                case "EQUAL_CASE_SENSITIVE":
+                    where += " " + filterdatafield + " LIKE BINARY '" + filtervalue + "'";
+                    break;
+                case "NOT_EQUAL":
+                    where += " " + filterdatafield + " NOT LIKE '" + filtervalue + "'";
+                    break;
+                case "NOT_EQUAL_CASE_SENSITIVE":
+                    where += " " + filterdatafield + " NOT LIKE BINARY '" + filtervalue + "'";
+                    break;
+                case "GREATER_THAN":
+                    where += " " + filterdatafield + " > '" + filtervalue + "'";
+                    break;
+                case "LESS_THAN":
+                    where += " " + filterdatafield + " < '" + filtervalue + "'";
+                    break;
+                case "GREATER_THAN_OR_EQUAL":
+                    where += " " + filterdatafield + " >= '" + filtervalue + "'";
+                    break;
+                case "LESS_THAN_OR_EQUAL":
+                    where += " " + filterdatafield + " <= '" + filtervalue + "'";
+                    break;
+                case "STARTS_WITH":
+                    where += " " + filterdatafield + " LIKE '" + filtervalue + "%'";
+                    break;
+                case "STARTS_WITH_CASE_SENSITIVE":
+                    where += " " + filterdatafield + " LIKE BINARY '" + filtervalue + "%'";
+                    break;
+                case "ENDS_WITH":
+                    where += " " + filterdatafield + " LIKE '%" + filtervalue + "'";
+                    break;
+                case "ENDS_WITH_CASE_SENSITIVE":
+                    where += " " + filterdatafield + " LIKE BINARY '%" + filtervalue + "'";
+                    break;
+                case "NULL":
+                    where += " " + filterdatafield + " IS NULL";
+                    break;
+                case "NOT_NULL":
+                    where += " " + filterdatafield + " IS NOT NULL";
+                    break;
             }
-            if (i == filterscount - 1)
-            {
+            if (i == filterscount - 1) {
                 where += ")";
             }
 
-                
+
             tmpfilteroperator = filteroperator;
             tmpdatafield = filterdatafield;
         }
     }
-    
+
     const orderby = "";
-    if (sortdatafield != null && sortorder != null && (sortorder.equals("asc") || sortorder.equals("desc")))
-    {
+    if (sortdatafield != null && sortorder != null && (sortorder.equals("asc") || sortorder.equals("desc"))) {
         orderby = "order by " + sortdatafield + " " + sortorder;
     }
 
     var sql = "Select * from tqall " + where + " " + orderby + " offset " + start + " rows fetch next " + pagesize + " rows only";
     // console.log('sql ' + sql);
     var total = 0;
-    (async function() {
+    (async function () {
         try {
-          connection = await oracledb.getConnection({
-            user: dbConfig.user,
-            password: dbConfig.password,
-            connectString: dbConfig.connectString
-          });
-      
-          result = await connection.execute("select count(*) total from tqall " + where + "");
-          data = await connection.execute(sql);
-          //
-          total = result.rows[0].TOTAL;
-          res.status(200).json({
-            message: "success",
-            totalRecords: total,
-            data: data.rows
-        });
-      
+            connection = await oracledb.getConnection({
+                user: dbConfig.user,
+                password: dbConfig.password,
+                connectString: dbConfig.connectString
+            });
+
+            result = await connection.execute("select count(*) total from tqall " + where + "");
+            data = await connection.execute(sql);
+            //
+            total = result.rows[0].TOTAL;
+            res.status(200).json({
+                message: "success",
+                totalRecords: total,
+                data: data.rows
+            });
+
         } catch (err) {
-          console.error(err);
+            console.error(err);
         } finally {
-          if (connection) {
-            try {
-              await connection.close();   // Always close connections
-            } catch (err) {
-              console.error(err.message);
+            if (connection) {
+                try {
+                    await connection.close();   // Always close connections
+                } catch (err) {
+                    console.error(err.message);
+                }
             }
-          }
         }
-      })();
+    })();
 
     /*oracledb.getConnection(
         {
@@ -217,6 +213,70 @@ router.get("/memos", (req, res, next) => {
                 function (err, result) {
                     if (err) {
                         console.error(err.message);
+                        //doRelease(connection);
+                        return;
+                    }
+                    res.status(200).json({
+                        message: "success",
+                        data: result.rows
+                    });
+                    //doRelease(connection);
+                });
+        });
+});
+
+router.get("/arocodes", (req, res, next) => {
+    var sql = "select distinct arocode from loans_stage"
+    oracledb.getConnection(
+        {
+            user: dbConfig.user,
+            password: dbConfig.password,
+            connectString: dbConfig.connectString
+        },
+        function (err, connection) {
+            if (err) {
+                console.error(err.message);
+                return;
+            }
+            connection.execute(
+                sql,
+                [],  // bind value for :id
+                {},
+                function (err, result) {
+                    if (err) {
+                        console.error(err.message);
+                        doRelease(connection);
+                        return;
+                    }
+                    res.status(200).json({
+                        message: "success",
+                        data: result.rows
+                    });
+                    doRelease(connection);
+                });
+        });
+});
+
+router.get("/productcode", (req, res, next) => {
+    var sql = "select distinct productcode from loans_stage order by productcode"
+    oracledb.getConnection(
+        {
+            user: dbConfig.user,
+            password: dbConfig.password,
+            connectString: dbConfig.connectString
+        },
+        function (err, connection) {
+            if (err) {
+                console.error(err.message);
+                return;
+            }
+            connection.execute(
+                sql,
+                [],  // bind value for :id
+                {},
+                function (err, result) {
+                    if (err) {
+                        console.error(err.message);
                         doRelease(connection);
                         return;
                     }
@@ -249,22 +309,22 @@ router.get("/branches", (req, res, next) => {
                 function (err, result) {
                     if (err) {
                         console.error(err.message);
-                        doRelease(connection);
+                        //doRelease(connection);
                         return;
                     }
                     res.status(200).json({
                         // message: "success",
                         data: result.rows
-                        
+
                     });
-                    doRelease(connection);
+                    //doRelease(connection);
                 });
         });
 });
 
 
 router.get("/buckets", (req, res, next) => {
-    var sql = "select bucket, sum(abs(oustbalance))  from tqall group by bucket order by bucket";
+    var sql = "select bucket, sum(abs(oustbalance)) value, count(accnumber) volume from tqall where productcode not in ('CAwOD','fixdep','LoanOD','SAMinBal','savings') group by bucket order by bucket";
     oracledb.getConnection(
         {
             user: dbConfig.user,
@@ -395,45 +455,45 @@ router.get("/brokenptps", (req, res, next) => {
 });
 
 router.get("/autodemands", (req, res, next) => {
-    (async function() {
+    (async function () {
         try {
-          connection = await oracledb.getConnection({
-            user: dbConfig.user,
-            password: dbConfig.password,
-            connectString: dbConfig.connectString
-          });
-      
-          result = await connection.execute("select * from autoletters where active = 'true'");
-          overalResult = [];
-          for (i=0; i<result.rows.length; i++) {
-              const memogrp = result.rows[i].MEMOGROUP;
-              const daysinarr = result.rows[i].DAYSINARR;
-              const letterid = result.rows[i].LETTERID;
-              
-              const sqlInsert = "select accnumber,custnumber,daysinarr, '"+letterid+"' demand from tqall where substr(accnumber,3,3) = '" + memogrp + "' and daysinarr = " + daysinarr;
-              selectResult = await connection.execute(sqlInsert);
-              if(selectResult.rows.length > 0) {console.log(selectResult.rows)};
-              overalResult = selectResult.rows;
-          };
-          // data = await connection.execute(sql);
-          //
-          res.status(200).json({
-            message: "success",
-            data: overalResult
-        });
-      
+            connection = await oracledb.getConnection({
+                user: dbConfig.user,
+                password: dbConfig.password,
+                connectString: dbConfig.connectString
+            });
+
+            result = await connection.execute("select * from autoletters where active = 'true'");
+            overalResult = [];
+            for (i = 0; i < result.rows.length; i++) {
+                const memogrp = result.rows[i].MEMOGROUP;
+                const daysinarr = result.rows[i].DAYSINARR;
+                const letterid = result.rows[i].LETTERID;
+
+                const sqlInsert = "select accnumber,custnumber,daysinarr, '" + letterid + "' demand from tqall where substr(accnumber,3,3) = '" + memogrp + "' and daysinarr = " + daysinarr;
+                selectResult = await connection.execute(sqlInsert);
+                if (selectResult.rows.length > 0) { console.log(selectResult.rows) };
+                overalResult = selectResult.rows;
+            };
+            // data = await connection.execute(sql);
+            //
+            res.status(200).json({
+                message: "success",
+                data: overalResult
+            });
+
         } catch (err) {
-          console.error(err);
+            console.error(err);
         } finally {
-          if (connection) {
-            try {
-              await connection.close();   // Always close connections
-            } catch (err) {
-              console.error(err.message);
+            if (connection) {
+                try {
+                    await connection.close();   // Always close connections
+                } catch (err) {
+                    console.error(err.message);
+                }
             }
-          }
         }
-      })();
+    })();
 });
 
 
@@ -467,7 +527,7 @@ router.post("/addDemand", (req, res, next) => {
                     doRelease(connection);
                 });
         });
-    
+
 });
 
 //handles url http://localhost:6001/products/1001

@@ -32,8 +32,21 @@ var gridcreditcardszerobal = require("./apis/grid_creditcardszerobal"); // Credi
 var gridcreditcardsviewallcards = require("./apis/grid_creditcardsviewallcards");
 var activeptps = require("./apis/activeptps");
 var xlsuploads = require("./apis/xlsuploads");
+var gridallcards = require("./apis/grid_allcards");
 
+var swStats = require('swagger-stats');  
+var bodyparser = require("body-parser");
 const app = express();
+
+app.use(bodyparser.json({ limit: '50mb' }));
+app.use(bodyparser.urlencoded({ extended: true, limit: '50mb' }));
+
+// Load your swagger specification 
+// var apiSpec = require('./swagger.json');
+
+// Enable swagger-stats middleware in express app, passing swagger specification as option 
+// app.use(swStats.getMiddleware({swaggerSpec:apiSpec}));
+app.use(swStats.getMiddleware());
 
 app.use(cors());
 // app.use(bodyparser.json());
@@ -71,6 +84,7 @@ app.use("/nodeapi/gridcreditcardszerobal",gridcreditcardszerobal); // Creditcard
 app.use("/nodeapi/gridcreditcardsviewallcards",gridcreditcardsviewallcards); // Creditcards/viewallcards
 app.use("/nodeapi/activeptps",activeptps);
 app.use("/nodeapi/xlsuploads",xlsuploads);
+app.use("/nodeapi/gridallcards",gridallcards);
 
 //if we are here then the specified request is not found
 app.use((req,res,next)=> {

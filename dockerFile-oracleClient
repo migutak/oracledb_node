@@ -22,5 +22,5 @@ RUN npm install
 EXPOSE 6001
 CMD ["node", "server.js"]
 
-# docker build -t migutak/oracledbnode:1.0.0 -f dockerFile-oracleClient . 
+# docker build -t 52.117.54.217/oracledbnode:1.0.0 -f dockerFile-oracleClient . 
 # docker run -it -d --name oraclenode -p 6001:6001 migutak/oracledbnode:1.0.0
