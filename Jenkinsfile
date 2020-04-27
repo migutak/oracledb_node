@@ -2,10 +2,10 @@ try {
    timeout(time: 20, unit: 'MINUTES') {
       node('nodejs') {
           stage('build') {
-            openshiftBuild(buildConfig: 'oracle-node', showBuildLogs: 'true')
+            openshiftBuild(buildConfig: 'oraclenode', showBuildLogs: 'true')
           }
           stage('deploy') {
-            openshiftDeploy(deploymentConfig: 'oracle-node')
+            openshiftDeploy(deploymentConfig: 'oraclenode')
           }
         }
    }
