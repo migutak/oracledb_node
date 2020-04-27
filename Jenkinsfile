@@ -1,6 +1,18 @@
-try {
-   timeout(time: 20, unit: 'MINUTES') {
-      stage('stage 1') {
+pipeline {
+    options {
+        // set a timeout of 30 minutes for this pipeline
+        timeout(time: 30, unit: 'MINUTES')
+    }
+    agent {
+      node {
+        // TODO: run this simple pipeline on jenkins 'master' node
+        label 'master'
+      }
+    }
+
+    stages {
+
+        stage('stage 1') {
             steps {
                 script {
                     openshift.withCluster() {
@@ -11,10 +23,28 @@ try {
                 }
             }
         }
-   }
-} catch (err) {
-   echo "in catch block"
-   echo "Caught: ${err}"
-   currentBuild.result = 'FAILURE'
-   throw err
-}          
+
+        // TODO: ADD A STAGE THAT SAYS HELLO
+        stage('stage 2') {
+        steps {
+            sh 'echo hello from stage 2!'
+        }
+        }
+
+        // TODO: ADD AN APPROVAL STAGE
+        stage('manual approval') {
+        steps {
+            timeout(time: 60, unit: 'MINUTES') {
+            input message: "Move to stage 3?"
+            }
+        }
+        }
+
+        stage('stage 3') {
+            steps {
+                sh 'echo hello from stage 3!. This is the last stage...'
+            }
+        }
+
+    }
+}
