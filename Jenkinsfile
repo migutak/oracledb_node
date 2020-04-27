@@ -1,12 +1,15 @@
 try {
    timeout(time: 20, unit: 'MINUTES') {
-      node('nodejs') {
-          stage('build') {
-            openshiftBuild(buildConfig: 'oraclenode', showBuildLogs: 'true')
-          }
-          stage('deploy') {
-            openshiftDeploy(deploymentConfig: 'oraclenode')
-          }
+      stage('stage 1') {
+            steps {
+                script {
+                    openshift.withCluster() {
+                        openshift.withProject() {
+                                echo "stage 1: using project: ${openshift.project()} in cluster ${openshift.cluster()}"
+                        }
+                    }
+                }
+            }
         }
    }
 } catch (err) {
