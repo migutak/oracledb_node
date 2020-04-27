@@ -3,6 +3,11 @@ pipeline {
         // set a timeout of 30 minutes for this pipeline
         timeout(time: 30, unit: 'MINUTES')
     }
+    environment {
+        DEV_PROJECT = "ecollect"
+        STAGE_PROJECT = "myapp-stage"
+        APP_GIT_URL = "https://github.com/migutak"
+    }
     agent {
       node {
         // TODO: run this simple pipeline on jenkins 'master' node
@@ -42,7 +47,13 @@ pipeline {
 
         stage('stage 3') {
             steps {
-                sh 'echo hello from stage 3!. This is the last stage...'
+                script {
+                    openshift.withCluster() {
+                        openshift.withProject(env.DEV_PROJECT) {
+                          openshift.selector("bc", "oraclenode").startBuild("--wait=true", "--follow=true")
+                        }
+                    }
+                }
             }
         }
 
