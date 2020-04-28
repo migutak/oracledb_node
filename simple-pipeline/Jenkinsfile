@@ -48,7 +48,7 @@ pipeline {
                 sh'''
                 echo 'creating new app...'
                 oc project ${DEV_PROJECT}
-                oc new-app --name app=${APP_NAME} ${APP_GIT_URL} --strategy=docker
+                oc new-app --name ${APP_NAME} ${APP_GIT_URL} --strategy=docker
                 sleep 5
                 '''
             }
