@@ -7,7 +7,7 @@ spec:
   strategy:
     type: JenkinsPipeline
     jenkinsPipelineStrategy:
-      jenkinsfilePath: jenkins/Jenkinsfile
+      jenkinsfilePath: Jenkinsfile
   postCommit: {}
   source:
     type: Git
