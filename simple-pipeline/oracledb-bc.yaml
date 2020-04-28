@@ -1,0 +1,17 @@
+kind: BuildConfig
+apiVersion: build.openshift.io/v1
+metadata:
+  name: oracledb-pipeline
+  namespace: ecollect
+spec:
+  strategy:
+    type: JenkinsPipeline
+    jenkinsPipelineStrategy:
+      jenkinsfilePath: Jenkinsfile
+  postCommit: {}
+  source:
+    type: Git
+    git:
+      uri: 'https://github.com/migutak/oracledb_node.git'
+      ref: master
+    contextDir: simple-pipeline
