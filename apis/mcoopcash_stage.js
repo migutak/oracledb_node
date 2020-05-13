@@ -61,6 +61,7 @@ router.get("/all", (req, res, next) => {
             password: dbConfig.password,
             connectString: dbConfig.connectString
           });
+          
       
           result = await connection.execute("select count(*) total from mcoopcash_stage ");
           data = await connection.execute(sql);

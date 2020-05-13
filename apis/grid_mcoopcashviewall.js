@@ -21,34 +21,35 @@ router.post("/viewall", (req, res, next) => {
 });
 
 
-function getData(request, resultsCallback) {
-      const SQL = buildSql(request);
-      oracledb.getConnection(
-      {
-          user: dbConfig.user,
-          password: dbConfig.password,
-          connectString: dbConfig.connectString
-      },
-      function (err, connection) {
-          if (err) {
-              console.error(err.message);
-              return;
-          }
-          connection.execute(
-              SQL,[],{}, function (err, result) {
-                  if (err) {
-                      console.error(err.message);
-                      doRelease(connection);
-                      return;
-                  }
-                  const rowCount = getRowCount(request, result.rows);
-                  const resultsForPage = cutResultsToPageSize(request, result.rows);
+  function getData(request, resultsCallback) {
+    const SQL = buildSql(request);
+    (async function () {
+        try {
+            connection = await oracledb.getConnection({
+                user: dbConfig.user,
+                password: dbConfig.password,
+                connectString: dbConfig.connectString
+            });
 
-                  resultsCallback(resultsForPage, rowCount);
-                  doRelease(connection);
-              });
-      });
-  }
+            result = await connection.execute(SQL);
+            const rowCount = getRowCount(request, result.rows);
+            const resultsForPage = cutResultsToPageSize(request, result.rows);
+
+            resultsCallback(resultsForPage, rowCount);
+
+        } catch (err) {
+            console.error(err);
+        } finally {
+            if (connection) {
+                try {
+                    await connection.close();   // Always close connections
+                } catch (err) {
+                    console.error(err.message);
+                }
+            }
+        }
+    })();
+}
 
   function buildSql(request) {
       const selectSql = createSelectSql(request);

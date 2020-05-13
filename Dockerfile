@@ -11,12 +11,17 @@ RUN yum -y install curl \
 yum -y install oracle-instantclient${release}.${update}-basic oracle-instantclient${release}.${update}-devel oracle-instantclient${release}.${update}-sqlplus && \
      rm -rf /var/cache/yum
 
-
-COPY . /app
-WORKDIR /app
-
+RUN useradd -ms /bin/bash  node
+#RUN usermod -aG sudo node
+USER node
+# Create app directory (with user `node`)
+RUN mkdir -p /home/node/app
+WORKDIR /home/node/app
+COPY --chown=node package* .
 RUN npm install
 
+# Bundle app source code
+COPY --chown=node . .
 
 EXPOSE 6001
 CMD ["node", "server.js"]

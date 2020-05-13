@@ -52,7 +52,7 @@ function getData(request, resultsCallback) {
 
 function buildSql(request) {
     const selectSql = createSelectSql(request);
-    const fromSql = ' from ptps p join tqall t on p.accnumber=t.accnumber where p.met !=\'met\' ';
+        
     const whereSql = createWhereSql(request);
     const limitSql = createLimitSql(request);
 
@@ -67,7 +67,7 @@ function buildSql(request) {
 }
 
 function createSelectSql(request) {
-    console.log(request)
+    //console.log(request)
     const rowGroupCols = request.rowGroupCols;
     const valueCols = request.valueCols;
     const groupKeys = request.groupKeys;
