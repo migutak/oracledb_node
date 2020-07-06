@@ -28,11 +28,11 @@ router.post('/uploadbulk-test', function (req, res) {
   var doinsert_autocommit = function (conn, cb) {
 
     conn.executeMany(
-        "insert into notehis(custnumber,accnumber,notemade,owner,notesrc) values(:custnumber,:accnumber,:notemade,:owner,:notesrc)",
+        "insert into notehis_bulk(custnumber,accnumber,notemade,owner,notesrc) values(:custnumber,:accnumber,:notemade,:owner,:notesrc)",
         req.body,
         { autoCommit: true },  // Override the default non-autocommit behavior
         function (err, result) {
-          console.log(result.rowsAffected);
+          //console.log(result.rowsAffected);
           if (err) {
             return cb(err, conn);
           } else {
